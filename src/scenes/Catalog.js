@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {
   ActivityIndicator,
+  Button,
   StyleSheet,
   View
 } from 'react-native'
@@ -23,13 +24,18 @@ export default class Catalog extends Component {
     title: 'Catalog'
   }
 
-  async loadCatalog() {
-    const catalog = await Loader.getCatalog()
+  async loadCatalog(refresh=false) {
+    const catalog = await Loader.getCatalog(refresh)
     this.setState({
       isLoading: false,
       catalog: catalog,
       selectedCategory: Object.keys(catalog)[0]
     })
+  }
+
+  refresh = () => {
+    console.log('refreshing')
+    this.loadCatalog(true)
   }
 
   selectCategory = (category) => {

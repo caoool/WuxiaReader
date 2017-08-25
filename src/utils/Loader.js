@@ -1,15 +1,30 @@
+import { AsyncStorage } from 'react-native'
+
 import cheerio from 'cheerio-without-node-native'
 
 import md5 from './md5'
 import CONSTANTS from '../constants'
 
 export default class Loader {
-  static async getCatalog() {
+  static async getCatalog(refresh=false) {
+    let catalog = null
+    let response = null
+
     try {
-      const response = await fetch('http://www.wuxiaworld.com')
+      // fetch from local storage
+      if (!refresh) {
+        response = await AsyncStorage.getItem('catalog')
+        if (response !== null) {
+          catalog = await JSON.parse(response)
+          console.log('Catalog fetched from local')
+          return catalog
+        }
+      }
+      
+      // fetch from online
+      response = await fetch('http://www.wuxiaworld.com')
       const html = await response.text()
       const $ = cheerio.load(html)
-      let catalog = {}
       $('#menu-home-menu').children((i, elem) => {
         if (![0, 5, 6, 7].includes(i)) {  // exclude 'home', 'resources', 'forums', 'wiki'
           let category = $(elem).children('a').text()
@@ -24,15 +39,32 @@ export default class Loader {
           })
         }
       })
+      console.log('Catalog fetched from online')
+
+      // save to local storage and return
+      await AsyncStorage.setItem('catalog', JSON.stringify(catalog))
+      console.log('Catalog saved')
       return catalog
     } catch(error) {
       console.log(error)
     }
   }
 
-  static async getChapters(url) {
+  static async getChapters(url, refresh=false) {
+    let chapters = null
+    let response = null
+
     try {
-      const response = await fetch(url)
+      if (!refresh) {
+        response = await AsyncStorage.getItem(url)
+        if (response !== null) {
+          chapters = await JSON.parse(response)
+          console.log('Chapter list fetched from local')
+          return chapters
+        }
+      }
+
+      response = await fetch(url)
       const html = await response.text()
       const $ = cheerio.load(html)
       let chapters = []
@@ -48,6 +80,10 @@ export default class Loader {
         }
         chapters.push(chapter)
       })
+      console.log('Chapter list fetched from online')
+
+      await AsyncStorage.setItem(url, JSON.stringify(chapters))
+      console.log('Chapter list saved')
       return chapters
     } catch(error) {
       console.log(error)
@@ -94,4 +130,5 @@ export default class Loader {
       console.log(error)
     }
   }
+
 }

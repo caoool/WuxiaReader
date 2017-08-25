@@ -22,8 +22,8 @@ export default class Book extends Component {
     title: navigation.state.params.title
   })
 
-  async loadChapters() {
-    const chapters = await Loader.getChapters(this.props.navigation.state.params.url)
+  async loadChapters(refresh=false) {
+    const chapters = await Loader.getChapters(this.props.navigation.state.params.url, refresh)
     this.setState({
       isLoading: false,
       chapters: chapters
