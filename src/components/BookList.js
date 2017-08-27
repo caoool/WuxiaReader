@@ -2,9 +2,17 @@ import React, { Component } from 'react'
 import {
   FlatList,
   StyleSheet,
-  Text,
   View
 } from 'react-native'
+
+import {
+  Body,
+  ListItem,
+  Text,
+  Thumbnail,
+  Right,
+  Icon
+} from 'native-base'
 
 export default class BookList extends Component {
   constructor(props) {
@@ -22,14 +30,24 @@ export default class BookList extends Component {
     return (
       <FlatList
         data={this.props.books}
+        refreshing={this.props.refreshing}
+        onRefresh={() => this.props.refresh()}
         renderItem={({item}) => (
-          <View style={styles.row}>
-            <Text
-              style={styles.bookTitle}
-              onPress={() => this._onPress(item.title, item.url)}>
-              {item.title}
-            </Text>
-          </View>
+          <ListItem
+            style={styles.row}
+            onPress={() => this._onPress(item.title, item.url)}>
+            <Thumbnail
+              square
+              size={80}
+              source={item.cover.url? item.cover : require('../../public/no-cover-placeholder.png')}/>
+            <Body>
+              <Text>{item.title}</Text>
+              <Text note>{item.description}</Text>
+            </Body>
+            <Right>
+              <Icon name="arrow-forward" />
+            </Right>
+          </ListItem>
         )}
       />
     )
@@ -38,12 +56,5 @@ export default class BookList extends Component {
 
 const styles = StyleSheet.create ({
   row: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    padding: 20
-  },
-
-  bookTitle: {
-    fontSize: 16
   }
 })

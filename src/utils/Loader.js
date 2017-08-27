@@ -16,34 +16,48 @@ export default class Loader {
         response = await AsyncStorage.getItem('catalog')
         if (response !== null) {
           catalog = await JSON.parse(response)
+          console.log(catalog)
           console.log('Catalog fetched from local')
           return catalog
         }
       }
       
       // fetch from online
+      catalog = { 'All': [] }
       response = await fetch('http://www.wuxiaworld.com')
       const html = await response.text()
       const $ = cheerio.load(html)
-      $('#menu-home-menu').children((i, elem) => {
+      await Promise.all($('#menu-home-menu').children().map(async (i, elem) => {
         if (![0, 5, 6, 7].includes(i)) {  // exclude 'home', 'resources', 'forums', 'wiki'
           let category = $(elem).children('a').text()
           catalog[category] = []
-          $(elem).children('ul').children().each((i2, e2) => {
+          const _category = $(elem).children('ul').first()
+          await Promise.all($(_category).children().map(async (i2, e2) => {
             let book = {
               'key': $(e2).children('a').text(),
               'title': $(e2).children('a').text(),
               'url': $(e2).children('a').attr('href')
             }
+            // fetch book details
+            const response2 = await fetch(book.url)
+            const html2 = await response2.text()
+            const $2 = cheerio.load(html2)
+            // fetch cover
+            const src = $2('article a img').first().attr('src')
+            book['cover'] = { url: src }
+            // fetch description
+            const description = $2('article p:nth-of-type(2)').text().substring(0, 50) + ' ...'
+            book['description'] = description
+            // push to catalog
             catalog[category].push(book)
-          })
+            catalog['All'].push(book)
+            console.log('Book fetched online')
+          }))
+          console.log('Category fetched online')
         }
-      })
+      }))
       console.log('Catalog fetched from online')
-
-      // save to local storage and return
       await AsyncStorage.setItem('catalog', JSON.stringify(catalog))
-      console.log('Catalog saved')
       return catalog
     } catch(error) {
       console.log(error)

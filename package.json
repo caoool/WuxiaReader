@@ -9,6 +9,7 @@
 	},
 	"dependencies": {
 		"cheerio-without-node-native": "^0.20.2",
+		"native-base": "^2.3.1",
 		"react": "16.0.0-alpha.12",
 		"react-native": "0.47.1",
 		"react-native-modalbox": "^1.4.2",

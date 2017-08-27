@@ -1,5 +1,5 @@
 import { AppRegistry } from 'react-native'
 
-import WuxiaReader from './src/WuxiaReader'
+import App from './src/App'
 
-AppRegistry.registerComponent('WuxiaReader', () => WuxiaReader);
+AppRegistry.registerComponent('WuxiaReader', () => App);
