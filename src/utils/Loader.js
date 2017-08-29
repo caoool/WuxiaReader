@@ -16,7 +16,6 @@ export default class Loader {
         response = await AsyncStorage.getItem('catalog')
         if (response !== null) {
           catalog = await JSON.parse(response)
-          console.log(catalog)
           console.log('Catalog fetched from local')
           return catalog
         }
@@ -43,11 +42,14 @@ export default class Loader {
             const html2 = await response2.text()
             const $2 = cheerio.load(html2)
             // fetch cover
-            const src = $2('article a img').first().attr('src')
+            const src = $2('main > article img').first().attr('src')
             book['cover'] = { url: src }
             // fetch description
             const description = $2('article p:nth-of-type(2)').text().substring(0, 50) + ' ...'
             book['description'] = description
+            // fetch last updated chapter
+            const lastChapter = $2('article a:contains(Chapter)').last().text()
+            book['lastChapter'] = lastChapter
             // push to catalog
             catalog[category].push(book)
             catalog['All'].push(book)
@@ -64,7 +66,9 @@ export default class Loader {
     }
   }
 
-  static async getChapters(url, refresh=false) {
+  static async loadBook(url, title, refresh=false) {
+    let book = null
+    let details = null
     let chapters = null
     let response = null
 
@@ -72,15 +76,18 @@ export default class Loader {
       if (!refresh) {
         response = await AsyncStorage.getItem(url)
         if (response !== null) {
-          chapters = await JSON.parse(response)
-          console.log('Chapter list fetched from local')
-          return chapters
+          book = await JSON.parse(response)
+          console.log('Book fetched local')
+          return book
         }
       }
 
       response = await fetch(url)
       const html = await response.text()
       const $ = cheerio.load(html)
+      book = {}
+
+      // parse chapters
       let chapters = []
       $('article a:contains(Chapter)').each((i, elem) => {
         let title = $(elem).text()
@@ -94,30 +101,89 @@ export default class Loader {
         }
         chapters.push(chapter)
       })
-      console.log('Chapter list fetched from online')
+      book['chapters'] = chapters
+      console.log('Chapters fetched online')
 
-      await AsyncStorage.setItem(url, JSON.stringify(chapters))
-      console.log('Chapter list saved')
-      return chapters
+      // parse details
+      details = {
+        url: url,
+        title: title
+      }
+      const src = $('main > article img').first().attr('src')
+      details['cover'] = { url: src }
+      const description = $('article p:nth-of-type(2)').text()
+      details['description'] = description
+      details['lastChapter'] = chapters[chapters.length-1].title
+      book['details'] = details
+      console.log('Details fetched online')
+
+      await AsyncStorage.setItem(url, JSON.stringify(book))
+      console.log('Book saved')
+      return book
     } catch(error) {
       console.log(error)
     }
   }
 
   static async loadChapter(url) {
+    let chapter = null
+    let response = null
+
     try {
-      const response = await fetch(url)
+      response = await AsyncStorage.getItem(url)
+      if (response !== null) {
+        chapter = await JSON.parse(response)
+        console.log('Chapter fetched local')
+        return chapter
+      }
+
+      response = await fetch(url)
       const html = await response.text()
       const $ = cheerio.load(html)
-      let chapter = []
+      let content = []
       $('div[itemprop=articleBody] p').each((i, elem) => {
         let paragraph = $(elem).text().split(' ')
-        chapter.push({
+        content.push({
           key: i,
           paragraph: paragraph
         })
       })
+      chapter = { content: content, read: true }
+      console.log('Chapter fetched online')
+
+      await AsyncStorage.setItem(url, JSON.stringify(chapter))
+      console.log('Chapter saved')
       return chapter
+    } catch(error) {
+      console.log(error)
+    }
+  }
+
+  static async loadNextChapter(bookUrl, chapterUrl, previous=false) {
+    let chapters = null
+    let response = null
+    let index = null
+
+    try {
+      response = await AsyncStorage.getItem(bookUrl)
+      if (response === null) { return false }
+      chapters = JSON.parse(response).chapters
+      for (let i in chapters) {
+        if (chapters[i].url == chapterUrl) {
+          if (previous) index = parseInt(i) - 1
+          else index = parseInt(i) + 1
+          break
+        }
+      }
+      if (chapters[index]) {
+        const chapter = await this.loadChapter(chapters[index].url)
+        const ret = {
+          url: chapters[index].url,
+          title: chapters[index].title,
+          chapter: chapter
+        }
+        return ret
+      }
     } catch(error) {
       console.log(error)
     }

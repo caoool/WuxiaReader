@@ -27,6 +27,12 @@ export default class BookList extends Component {
   }
 
   render() {
+    lastRead = (item) => {
+      if (item.user && item.user.lastRead)
+        return <Text note style={styles.sub}>{item.user.lastRead.title}</Text>
+      else return <View />
+    }
+
     return (
       <FlatList
         data={this.props.books}
@@ -39,10 +45,11 @@ export default class BookList extends Component {
             <Thumbnail
               square
               size={80}
-              source={item.cover.url? item.cover : require('../../public/no-cover-placeholder.png')}/>
+              source={item.cover.url ? item.cover : require('../../public/no-cover-placeholder.png')}/>
             <Body>
-              <Text>{item.title}</Text>
-              <Text note>{item.description}</Text>
+              <Text style={styles.title}>{item.title}</Text>
+              <Text note style={styles.sub}>{item.lastChapter}</Text>
+              {lastRead(item)}
             </Body>
             <Right>
               <Icon name="arrow-forward" />
@@ -55,6 +62,13 @@ export default class BookList extends Component {
 }
 
 const styles = StyleSheet.create ({
-  row: {
+  title: {
+    marginLeft: 20,
+    fontWeight: 'bold'
+  },
+
+  sub: {
+    marginLeft: 20,
+    fontSize: 12
   }
 })

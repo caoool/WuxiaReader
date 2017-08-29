@@ -17,16 +17,36 @@ import Catalog from './scenes/Catalog'
 import Book from './scenes/Book'
 import Reader from './scenes/Reader'
 
+const FavoritesView = StackNavigator({
+  Favorites: { screen: Favorites },
+  Book: {
+    screen: Book,
+    navigationOptions: { tabBarVisible: false }
+  },
+  Reader: {
+    screen: Reader,
+    navigationOptions: { tabBarVisible: false }
+  }
+}, {
+  headerMode: 'none'
+})
+
 const CatalogView = StackNavigator({
   Catalog: { screen: Catalog },
-  Book: { screen: Book },
-  Reader: { screen: Reader }
+  Book: {
+    screen: Book,
+    navigationOptions: { tabBarVisible: false }
+  },
+  Reader: { 
+    screen: Reader,
+    navigationOptions: { tabBarVisible: false }
+  }
 }, {
   headerMode: 'none'
 })
 
 const Tabs = TabNavigator({
-  Favorites: { screen: Favorites },
+  Favorites: { screen: FavoritesView },
   CatalogView: { screen: CatalogView },
   Glossary: { screen: Glossary },
   Settings: { screen: Settings }

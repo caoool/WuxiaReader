@@ -6,6 +6,8 @@ import {
   View
 } from 'react-native'
 
+import StatusBarPadding from './StatusBarPadding'
+
 export default class ContentViewer extends Component {
   constructor(props) {
     super(props)
@@ -31,16 +33,19 @@ export default class ContentViewer extends Component {
   
     renderChapter = () => {
       return (
-        <FlatList
-          data={this.props.chapter}
-          renderItem={({item}) => (
-            <View style={styles.row}>
-              <Text style={styles.word}>
-                {renderRow(item.paragraph)}
-              </Text>
-            </View>
-          )}
-        />
+        <View>
+          <FlatList
+            style={styles.view}
+            data={this.props.chapter.content}
+            renderItem={({item}) => (
+              <View style={styles.row}>
+                <Text style={styles.word}>
+                  {renderRow(item.paragraph)}
+                </Text>
+              </View>
+            )}
+          />
+        </View>
       )
     }
 
@@ -49,6 +54,9 @@ export default class ContentViewer extends Component {
 }
 
 const styles = StyleSheet.create({
+  view: {
+  },
+
   content: {
     margin: 30
   },

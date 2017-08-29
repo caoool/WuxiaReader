@@ -71,13 +71,19 @@ export default class Catalog extends Component {
   }
 
   render() {
-    if (this.state.isLoading) {
-      return (
-        <View style={styles.activityIndicator}>
-          <ActivityIndicator />
-        </View>
-      )
-    }
+    let content = this.state.isLoading ? (
+      <View style={styles.activityIndicator}>
+        <ActivityIndicator />
+      </View>
+    ) : (
+      <View style={styles.bookList}>
+        <BookList
+          books={this.state.books}
+          navigate={this.props.navigation.navigate}
+          refresh={this.refresh}
+          refreshing={this.state.refreshing}/>
+      </View>
+    )
 
     return (
       <View style={styles.container}>
@@ -92,13 +98,7 @@ export default class Catalog extends Component {
             selectCategory={this.selectCategory}
             categories={Object.keys(this.state.catalog)}/>
         </Header>
-        <View style={styles.bookList}>
-          <BookList
-            books={this.state.books}
-            navigate={this.props.navigation.navigate}
-            refresh={this.refresh}
-            refreshing={this.state.refreshing}/>
-        </View>
+        {content}
       </View>
     )
   }

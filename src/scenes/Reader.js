@@ -5,24 +5,32 @@ import {
   Text,
   View
 } from 'react-native'
+import { NavigationActions } from 'react-navigation'
+
+import {
+  Container,
+  Header,
+  Button,
+  Icon,
+  Left,
+  Right
+} from 'native-base'
 
 import TranslationModal from '../components/TranslationModal'
 import ContentViewer from '../components/ContentViewer'
 
 import Loader from '../utils/Loader'
+import UserManager from '../utils/UserManager'
 
 export default class Reader extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isLoading: true
+      isLoading: true,
+      url: this.props.navigation.state.params.url,
+      title: this.props.navigation.state.params.title
     }
   }
-
-  static navigationOptions = ({ navigation }) => ({
-    title: navigation.state.params.title,
-    // header: null
-  })
 
   async loadChapter() {
     const chapter = await Loader.loadChapter(this.props.navigation.state.params.url)
@@ -31,6 +39,19 @@ export default class Reader extends Component {
       chapter: chapter,
       wordToTranslate: ''
     })
+  }
+
+  async loadNextChapter(previous=false) {
+    this.setState({ isLoading: true })
+    const ret = await Loader.loadNextChapter(this.props.navigation.state.params.bookUrl, this.state.url, previous)
+    this.setState({
+      isLoading: false,
+      chapter: ret.chapter,
+      wordToTranslate: '',
+      url: ret.url,
+      title: ret.title
+    })
+    UserManager.chapterRead(this.props.navigation.state.params.bookUrl, this.state.url, this.state.title)
   }
 
   translate = (word) => {
@@ -43,23 +64,46 @@ export default class Reader extends Component {
   }
 
   render() {
-    if (this.state.isLoading) {
-      return (
-        <View style={styles.activityIndicator}>
-          <ActivityIndicator />
-        </View>
-      )
-    }
-
-    return (
-      <View style={styles.container}>
+    let content = this.state.isLoading ? (
+      <View style={styles.activityIndicator}>
+        <ActivityIndicator />
+      </View>
+    ) : (
+      <Container>
         <TranslationModal
           ref={'modal'}
           wordToTranslate={this.state.wordToTranslate}/>
         <ContentViewer
           chapter={this.state.chapter}
           translate={this.translate}/>
-      </View>
+      </Container>
+    )
+
+    return (
+      <Container>
+        <Header style={styles.header}>
+          <Left>
+            <Button
+              transparent
+              onPress={() => this.props.navigation.dispatch(NavigationActions.back())}>
+              <Icon style={{color: 'black'}} name='arrow-back' />
+            </Button>
+          </Left>
+          <Right>
+            <Button danger transparent
+              onPress={() => this.loadNextChapter(true)}>
+              <Icon style={{color: 'black'}} name='arrow-back' />
+              <Text> Prev</Text>
+            </Button>
+            <Button info transparent
+              onPress={() => this.loadNextChapter()}>
+              <Text>Next </Text>
+              <Icon style={{color: 'black'}} name='arrow-forward' />
+            </Button>
+          </Right>
+        </Header>
+        {content}
+      </Container>
     )
   }
 }
