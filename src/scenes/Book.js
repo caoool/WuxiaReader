@@ -69,12 +69,14 @@ export default class Book extends Component {
     if (this.state.book.user && this.state.book.user.lastRead) {
       this.props.navigation.navigate('Reader', {
         title: this.state.book.user.lastRead.title,
-        url: this.state.book.user.lastRead.url
+        url: this.state.book.user.lastRead.url,
+        bookUrl: this.state.book.details.url
       })
     } else {
       this.props.navigation.navigate('Reader', {
         title: this.state.book.chapters[0].title,
-        url: this.state.book.chapters[0].url
+        url: this.state.book.chapters[0].url,
+        bookUrl: this.state.book.details.url
       })
     }
   }
@@ -113,10 +115,10 @@ export default class Book extends Component {
             </Button>
           </Left>
           <Right>
-            <Button dark transparent
+            {/* <Button dark transparent
               onPress={() => this.downloadBook()}>
               <Icon name='md-download' />
-            </Button>
+            </Button> */}
             <Button danger transparent
               onPress={() => this.toggleFavorite()}>
               <Icon name={this.state.favorited ? 'md-heart' : 'md-heart-outline'} />

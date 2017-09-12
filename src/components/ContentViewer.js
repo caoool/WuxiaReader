@@ -55,13 +55,24 @@ export default class ContentViewer extends Component {
 
 const styles = StyleSheet.create({
   view: {
+    backgroundColor: 'white'
   },
 
-  content: {
-    margin: 30
+  viewNight: {
+    backgroundColor: 'black'
   },
 
   row: {
+    backgroundColor: 'white',
+    flex: 1,
+    justifyContent: 'flex-start',
+    padding: 15,
+    paddingLeft: 20,
+    paddingRight: 20
+  },
+
+  rowNight: {
+    backgroundColor: 'black',
     flex: 1,
     justifyContent: 'flex-start',
     padding: 15,
@@ -70,6 +81,16 @@ const styles = StyleSheet.create({
   },
 
   word: {
+    color: 'black',
+    fontSize: 18,
+    textAlign: 'justify',
+    lineHeight: 30,
+    flexDirection: 'row',
+    flexWrap: 'wrap'
+  },
+
+  wordNight: {
+    color: 'white',
     fontSize: 18,
     textAlign: 'justify',
     lineHeight: 30,

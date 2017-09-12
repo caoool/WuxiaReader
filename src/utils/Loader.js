@@ -59,7 +59,7 @@ export default class Loader {
         }
       }))
       console.log('Catalog fetched from online')
-      await AsyncStorage.setItem('catalog', JSON.stringify(catalog))
+      await AsyncStorage.mergeItem('catalog', JSON.stringify(catalog))
       return catalog
     } catch(error) {
       console.log(error)
@@ -151,7 +151,7 @@ export default class Loader {
       chapter = { content: content, read: true }
       console.log('Chapter fetched online')
 
-      await AsyncStorage.setItem(url, JSON.stringify(chapter))
+      await AsyncStorage.mergeItem(url, JSON.stringify(chapter))
       console.log('Chapter saved')
       return chapter
     } catch(error) {

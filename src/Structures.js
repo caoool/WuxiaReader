@@ -48,8 +48,8 @@ const CatalogView = StackNavigator({
 const Tabs = TabNavigator({
   Favorites: { screen: FavoritesView },
   CatalogView: { screen: CatalogView },
-  Glossary: { screen: Glossary },
-  Settings: { screen: Settings }
+  // Glossary: { screen: Glossary },
+  // Settings: { screen: Settings }
 }, {
   tabBarPosition: 'bottom',
   tabBarComponent: props => {
@@ -70,7 +70,7 @@ const Tabs = TabNavigator({
             <Icon name="md-globe" />
             <Text>Catalog</Text>
           </Button>
-          <Button
+          {/* <Button
             vertical
             active={props.navigationState.index === 2}
             onPress={() => props.navigation.navigate('Glossary')}>
@@ -83,7 +83,7 @@ const Tabs = TabNavigator({
             onPress={() => props.navigation.navigate('Settings')}>
             <Icon name="md-settings" />
             <Text>Settings</Text>
-          </Button>
+          </Button> */}
         </FooterTab>
       </Footer>
     ) 

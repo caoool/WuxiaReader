@@ -28,7 +28,8 @@ export default class Reader extends Component {
     this.state = {
       isLoading: true,
       url: this.props.navigation.state.params.url,
-      title: this.props.navigation.state.params.title
+      title: this.props.navigation.state.params.title,
+      nightMode: false
     }
   }
 
@@ -44,14 +45,26 @@ export default class Reader extends Component {
   async loadNextChapter(previous=false) {
     this.setState({ isLoading: true })
     const ret = await Loader.loadNextChapter(this.props.navigation.state.params.bookUrl, this.state.url, previous)
-    this.setState({
-      isLoading: false,
-      chapter: ret.chapter,
-      wordToTranslate: '',
-      url: ret.url,
-      title: ret.title
-    })
+    if (ret) {
+      this.setState({
+        isLoading: false,
+        chapter: ret.chapter,
+        wordToTranslate: '',
+        url: ret.url,
+        title: ret.title
+      })
+    } else {
+      this.setState({
+        isLoading: false,
+        wordToTranslate: ''
+      })
+    }
     UserManager.chapterRead(this.props.navigation.state.params.bookUrl, this.state.url, this.state.title)
+  }
+
+  toggleNightMode = () => {
+    this.setState({nightMode: !this.state.nightMode})
+    console.log(this.state.nightMode)
   }
 
   translate = (word) => {
@@ -75,7 +88,8 @@ export default class Reader extends Component {
           wordToTranslate={this.state.wordToTranslate}/>
         <ContentViewer
           chapter={this.state.chapter}
-          translate={this.translate}/>
+          translate={this.translate}
+          nightMode={this.state.nightMode}/>
       </Container>
     )
 
