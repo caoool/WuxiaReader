@@ -3,7 +3,8 @@ import {
   ActivityIndicator,
   StyleSheet,
   Text,
-  View
+  View,
+  TouchableWithoutFeedback
 } from 'react-native'
 import { NavigationActions } from 'react-navigation'
 
@@ -16,6 +17,8 @@ import {
   Right
 } from 'native-base'
 
+import StatusBarPadding from '../components/StatusBarPadding'
+import ReaderSettingsModal from '../components/ReaderSettingsModal'
 import TranslationModal from '../components/TranslationModal'
 import ContentViewer from '../components/ContentViewer'
 
@@ -62,14 +65,21 @@ export default class Reader extends Component {
     UserManager.chapterRead(this.props.navigation.state.params.bookUrl, this.state.url, this.state.title)
   }
 
-  toggleNightMode = () => {
-    this.setState({nightMode: !this.state.nightMode})
-    console.log(this.state.nightMode)
+  changeSettings = () => {
+    this.refs.readerSettingsModal.open()
+  }
+
+  goBack = () => {
+    this.props.navigation.dispatch(NavigationActions.back())
+  }
+
+  loadNext = (previous=false) => {
+    this.loadNextChapter(previous)
   }
 
   translate = (word) => {
     this.setState({ wordToTranslate: word })
-    this.refs.modal.open()
+    this.refs.translationModal.open()
   }
 
   componentDidMount() {
@@ -82,42 +92,26 @@ export default class Reader extends Component {
         <ActivityIndicator />
       </View>
     ) : (
-      <Container>
+      <View style={styles.container}>
+        <ReaderSettingsModal
+          ref={'readerSettingsModal'}
+          goBack={this.goBack}
+          loadNext={this.loadNext}/>
         <TranslationModal
-          ref={'modal'}
+          ref={'translationModal'}
           wordToTranslate={this.state.wordToTranslate}/>
         <ContentViewer
           chapter={this.state.chapter}
           translate={this.translate}
-          nightMode={this.state.nightMode}/>
-      </Container>
+          changeSettings={this.changeSettings}/>
+      </View>
     )
 
     return (
-      <Container>
-        <Header style={styles.header}>
-          <Left>
-            <Button
-              transparent
-              onPress={() => this.props.navigation.dispatch(NavigationActions.back())}>
-              <Icon style={{color: 'black'}} name='arrow-back' />
-            </Button>
-          </Left>
-          <Right>
-            <Button danger transparent
-              onPress={() => this.loadNextChapter(true)}>
-              <Icon style={{color: 'black'}} name='arrow-back' />
-              <Text> Prev</Text>
-            </Button>
-            <Button info transparent
-              onPress={() => this.loadNextChapter()}>
-              <Text>Next </Text>
-              <Icon style={{color: 'black'}} name='arrow-forward' />
-            </Button>
-          </Right>
-        </Header>
+      <View style={styles.container}>
+        <StatusBarPadding/>
         {content}
-      </Container>
+      </View>
     )
   }
 }

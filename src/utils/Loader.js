@@ -140,15 +140,11 @@ export default class Loader {
       response = await fetch(url)
       const html = await response.text()
       const $ = cheerio.load(html)
-      let content = []
-      $('div[itemprop=articleBody] p').each((i, elem) => {
-        let paragraph = $(elem).text().split(' ')
-        content.push({
-          key: i,
-          paragraph: paragraph
-        })
-      })
-      chapter = { content: content, read: true }
+      let raw = cheerio.load($('div[itemprop=articleBody]').html())
+      raw('p').has('a, img').remove()
+      raw('hr').remove()
+      let article = raw.html()
+      chapter = { content: article, read: true }
       console.log('Chapter fetched online')
 
       await AsyncStorage.mergeItem(url, JSON.stringify(chapter))
