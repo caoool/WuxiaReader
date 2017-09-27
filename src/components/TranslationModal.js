@@ -8,6 +8,8 @@ import {
   Dimensions
 } from 'react-native'
 
+import Meteor, { createContainer } from 'react-native-meteor'
+
 import {
   Button,
   H1,
@@ -18,13 +20,15 @@ import Modal from 'react-native-modalbox'
 
 import CONSTANTS from '../constants'
 import Loader from '../utils/Loader'
+import UserManager from '../utils/UserManager'
 
-export default class TranslationModal extends Component {
+class TranslationModal extends Component {
   constructor(props) {
     super(props)
     this.state = {
       isLoading: true,
       word: '',
+      isFaved: false,
       translation: {
         phonetic: '',
         definition: ''
@@ -32,27 +36,46 @@ export default class TranslationModal extends Component {
     }
   }
 
+  initalSetup = async (wordToTranslate) => {
+    const word = wordToTranslate.trim()
+    this.loadTranslation(word)
+    this.addCount(word)
+    const isFaved = await UserManager.checkWord(word)
+    this.setState({ isFaved: isFaved })
+  }
+
   open = () => {
     this.refs.modal.open()
   }
 
-  loadTranslation = async (data) => {
-    const translation = await Loader.loadTranslation(data)
+  addCount = (word) => {
+    Meteor.call('vocabulary.addCount', { word })
+  }
+
+  addFav = (word) => {
+    if (this.state.isFaved) { return }
+    UserManager.saveWord(word)
+    Meteor.call('vocabulary.addFav', { word })
+    this.setState({ isFaved: true })
+    console.log(UserManager.getWords())
+  }
+
+  loadTranslation = async (word) => {
+    const translation = await Loader.loadTranslation(word)
     this.setState({
       isLoading: false,
-      word: data,
+      word: word,
       translation: translation
     })
   }
 
-  onOpened = () => {
-    this.loadTranslation(this.props.wordToTranslate)
-  }
+  onOpened = () => {}
 
   onClosed = () => {
     this.setState({
-      isLoading: false,
+      isLoading: true,
       word: '',
+      ifFaved: false,
       translation: {
         phonetic: '',
         definition: ''
@@ -61,10 +84,60 @@ export default class TranslationModal extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.loadTranslation(nextProps.wordToTranslate)
+    if (!nextProps.wordToTranslate) { return }
+    if (nextProps.wordToTranslate == this.props.wordToTranslate) { return }
+    this.open()
+    this.initalSetup(nextProps.wordToTranslate)
   }
 
   render() {
+    let content = this.state.isLoading ? (
+      <View style={styles.activityIndicator}>
+        <ActivityIndicator />
+      </View>
+    ) : (
+      <View>
+        <View style={styles.functionRow}>
+          <Button transparent
+            style={styles.starButton}
+            onPress={() => this.addFav(this.state.word)}>
+            {this.state.isFaved ? (
+              <Icon
+                style={styles.starIcon}
+                name='md-star'/>
+            ) : (
+              <Icon
+                style={styles.starIcon}
+                name='md-star-outline'/>
+            )}
+            <Text>
+              <Text style={styles.starNumberCount}>{this.props.fav}</Text>
+              <Text style={styles.starNumberDecorator}>{'    ♥ᔕTᗩᖇᔕ♥'}</Text>
+              <Text style={styles.totalCountNumber}>{'\n' + this.props.count + ' look ups'}</Text>
+            </Text>
+          </Button>
+          <Button style={styles.languageButton} bordered light small>
+            <Text style={styles.languageButtonText}>ENG - CHN  </Text>
+            <Icon name='md-arrow-dropdown' />
+          </Button>
+        </View>
+        <ScrollView style={styles.translationArea}>
+          {this.state.translation.phonetic ? (
+            <View>
+              <H1 style={styles.wordToTranslate}>{this.state.word}</H1>
+              <Text style={styles.phonetic}>
+                [{this.state.translation.phonetic}]{'    '}
+                <Icon style={styles.mic} name={'md-mic'}/>
+              </Text>
+            </View>
+          ) : (
+            <Text style={styles.wordToTranslate}>{this.state.word}</Text>
+          )}
+          <Text style={styles.translation}>{this.state.translation.definition}</Text>
+        </ScrollView>
+      </View>
+    )
+
     return (
       <Modal
         style={styles.modal}
@@ -77,50 +150,22 @@ export default class TranslationModal extends Component {
         backdropPressToClose={true}
         onOpened={this.onOpened}
         onClosed={this.onClosed}>
-        {this.state.isLoading ? (
-          <View style={styles.activityIndicator}>
-            <ActivityIndicator />
-          </View>
-        ) : (
-          <View>
-            <View style={styles.functionRow}>
-              <Button 
-                style={styles.starButton}
-                transparent>
-                <Icon
-                  style={styles.starIcon}
-                  name='md-star-outline'/>
-                <Text>
-                  <Text style={styles.starNumberCount}>{'500'}</Text>
-                  <Text style={styles.starNumberDecorator}>{'    ♥ᔕTᗩᖇᔕ♥'}</Text>
-                  <Text style={styles.totalCountNumber}>{'\n3000 look ups'}</Text>
-                </Text>
-              </Button>
-              <Button style={styles.languageButton} bordered light small>
-                <Text style={styles.languageButtonText}>ENG - CHN  </Text>
-                <Icon name='md-arrow-dropdown' />
-              </Button>
-            </View>
-            <ScrollView style={styles.translationArea}>
-              {this.state.translation.phonetic ? (
-                <View>
-                  <H1 style={styles.wordToTranslate}>{this.state.word}</H1>
-                  <Text style={styles.phonetic}>
-                    [{this.state.translation.phonetic}]{'    '}
-                    <Icon style={styles.mic} name={'md-mic'}/>
-                  </Text>
-                </View>
-              ) : (
-                <Text style={styles.wordToTranslate}>{this.state.word}</Text>
-              )}
-              <Text style={styles.translation}>{this.state.translation.definition}</Text>
-            </ScrollView>
-          </View>
-        )}
+        {content}
       </Modal>
     )
   }
 }
+
+export default createContainer(props => {
+  Meteor.subscribe('vocabulary.word', props.wordToTranslate.trim())
+  const item = Meteor.collection('vocabulary').findOne()
+  count = item ? item.count : 0
+  fav = item ? item.fav : 0
+  return {
+    count: count,
+    fav: fav
+  }
+}, TranslationModal)
 
 const styles = StyleSheet.create({
   activityIndicator: {

@@ -82,4 +82,39 @@ export default class UserManager {
       console.log(error)
     }
   }
+
+  static async checkWord(word) {
+    try {
+      const response = await AsyncStorage.getItem('vocabulary')
+      if (response === null) { return false }
+      return JSON.parse(response).includes(word)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  static async saveWord(word) {
+    try {
+      const response = await AsyncStorage.getItem('vocabulary')
+      if (response === null) {
+        AsyncStorage.setItem('vocabulary', JSON.stringify([word]))
+      } else {
+        vocabulary = JSON.parse(response)
+        vocabulary.push(word)
+        AsyncStorage.setItem('vocabulary', JSON.stringify(vocabulary))
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  static async getWords() {
+    try {
+      const response = await AsyncStorage.getItem('vocabulary')
+      if (response === null) { return null }
+      return JSON.parse(response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 }

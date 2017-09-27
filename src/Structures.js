@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { StackNavigator, TabNavigator } from 'react-navigation'
-
 import {
   Button,
   Text,
@@ -9,6 +8,11 @@ import {
   FooterTab
 } from 'native-base'
 
+
+import Meteor from 'react-native-meteor'
+
+import CONSTANTS from './constants'
+
 import Favorites from './scenes/Favorites'
 import Glossary from './scenes/Glossary'
 import Settings from './scenes/Settings'
@@ -16,6 +20,7 @@ import Settings from './scenes/Settings'
 import Catalog from './scenes/Catalog'
 import Book from './scenes/Book'
 import Reader from './scenes/Reader'
+
 
 const FavoritesView = StackNavigator({
   Favorites: { screen: Favorites },
@@ -91,6 +96,10 @@ const Tabs = TabNavigator({
 })
 
 export default class Entry extends Component {
+  componentWillMount() {
+    Meteor.connect(CONSTANTS.SERVER_URL);
+  }
+
   render() {
     return <Tabs />
   }

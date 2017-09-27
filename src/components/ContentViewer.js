@@ -71,8 +71,7 @@ export default class ContentViewer extends Component {
     return (
       <WebView
         source={{html: pre + this.props.chapter.content + post}}
-        onMessage={(event) => this._hook(event.nativeEvent.data)}
-      />
+        onMessage={(event) => this._hook(event.nativeEvent.data)} />
     )
   }
 }

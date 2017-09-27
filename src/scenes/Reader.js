@@ -79,7 +79,6 @@ export default class Reader extends Component {
 
   translate = (word) => {
     this.setState({ wordToTranslate: word })
-    this.refs.translationModal.open()
   }
 
   componentDidMount() {
