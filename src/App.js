@@ -1,6 +1,6 @@
 // Clear storage for development purpose
-// import { AsyncStorage } from 'react-native'
-// AsyncStorage.clear()
+import UserManager from './utils/UserManager'
+UserManager.wipeData(0)
 
 import Entry from './Structures'
 

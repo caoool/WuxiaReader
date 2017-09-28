@@ -33,9 +33,12 @@ let pre = `
 let post = `
 <script>
   userHasScrolled = false;
-  window.onscroll = function (e)
+  window.onscroll = function(e)
   {
       userHasScrolled = true;
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        window.postMessage("loadNextChapter")
+      }
   }
   document.addEventListener("selectionchange", function() {
     window.postMessage(window.getSelection())
@@ -48,6 +51,7 @@ let post = `
     if (window.getSelection() != '') { return }
     window.postMessage("launchSettingsModal")
   });
+
 </script>
 </body>
 </html>
@@ -62,6 +66,8 @@ export default class ContentViewer extends Component {
     if (data) {
       if (data == 'launchSettingsModal') {
         this.props.changeSettings()
+      } else if (data == 'loadNextChapter') {
+        console.log('loadNextChapter')
       } else {
         this.props.translate(data)
       }

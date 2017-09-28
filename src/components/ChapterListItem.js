@@ -65,20 +65,14 @@ const styles = StyleSheet.create ({
   text: {
     flex: 1,
     fontSize: 15,
-    marginRight: 20
+    marginRight: 20,
+    color: 'white'
   },
 
   row: {
-    margin: 10,
-    borderRadius: 12,
-    borderWidth: 0.5,
-    borderColor: '#d6d7da',
-    backgroundColor: '#e5e5e5',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.8,
-    shadowRadius: 10,
-    elevation: 1,
+    marginTop: 10,
+    backgroundColor: 'transparent',
+    borderBottomWidth: 0
   },
 
   icons: {

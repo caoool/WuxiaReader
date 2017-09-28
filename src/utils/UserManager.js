@@ -1,6 +1,24 @@
 import { AsyncStorage } from 'react-native'
 
 export default class UserManager {
+  static async wipeData(flag) {
+    try {
+      const response = await AsyncStorage.getItem('wipeFlag')
+      if (response === null) { 
+        AsyncStorage.clear()
+        AsyncStorage.setItem('wipeFlag', JSON.stringify(flag))
+      } else {
+        const _flag = JSON.parse('wipeFlag')
+        if (flag > _flag) {
+          AsyncStorage.clear()
+          AsyncStorage.setItem('wipeFlag', JSON.stringify(flag))
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   static async isFavorited(url) {
     try {
       const response = await AsyncStorage.getItem(url)

@@ -92,7 +92,7 @@ export default class Catalog extends Component {
     )
 
     return (
-      <Container>
+      <Container style={styles.container}>
         <Header rounded searchBar
           style={styles.header}>
           <MyStatusBar
@@ -129,7 +129,8 @@ export default class Catalog extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#021631'
   },
 
   header: {
