@@ -46,7 +46,10 @@ const FavoritesView = StackNavigator({
     navigationOptions: { tabBarVisible: false }
   }
 }, {
-  headerMode: 'none'
+  headerMode: 'none',
+  cardStyle: {
+    opacity: 1,
+  }
 })
 
 const Tabs = TabNavigator({

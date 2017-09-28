@@ -106,7 +106,7 @@ export default class Book extends Component {
     )
 
     return (
-      <Container>
+      <Container style={styles.content}>
         <Header style={styles.header}>
           <MyStatusBar
             backgroundColor="#021631"

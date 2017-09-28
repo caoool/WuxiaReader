@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: undefined,
     height: undefined,
-    backgroundColor:'transparent',
+    backgroundColor:'#021631',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   details: {
     flex: 0,
     paddingBottom: 15,
-    backgroundColor: 'white',
+    backgroundColor: '#021631',
     margin: 10,
     borderRadius: 12,
     borderWidth: 0.5,

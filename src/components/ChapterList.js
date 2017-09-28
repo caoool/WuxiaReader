@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {
-  FlatList
+  FlatList,
+  StyleSheet
 } from 'react-native'
 
 import ChapterListItem from './ChapterListItem'
@@ -13,6 +14,7 @@ export default class ChapterList extends Component {
   render() {
     return (
       <FlatList
+        style={styles.list}
         data={this.props.chapters}
         refreshing={this.props.refreshing}
         onRefresh={() => this.props.refresh()}
@@ -27,3 +29,9 @@ export default class ChapterList extends Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  list: {
+    backgroundColor: '#021631'
+  }
+})
