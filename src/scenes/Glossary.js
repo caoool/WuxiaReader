@@ -7,7 +7,9 @@ import {
 } from 'react-native'
 
 import WordList from '../components/WordList'
+import MyStatusBar from '../components/MyStatusBar'
 import StatusBarPadding from '../components/StatusBarPadding'
+import BlankPlaceholder from '../components/BlankPlaceholder'
 
 import Loader from '../utils/Loader'
 import UserManager from '../utils/UserManager'
@@ -45,7 +47,10 @@ export default class Glossary extends Component {
         <ActivityIndicator />
       </View>
     ) : (
-      <View>
+      <View style={styles.container}>
+        {!this.state.words &&
+          <BlankPlaceholder />
+        }
         <WordList
           words={this.state.words}
           refresh={this.refresh}
@@ -55,6 +60,9 @@ export default class Glossary extends Component {
 
     return (
       <View style={styles.container}>
+        <MyStatusBar
+          backgroundColor="#021631"
+          barStyle="light-content" />
         <StatusBarPadding />
         {content}
       </View>
@@ -64,7 +72,8 @@ export default class Glossary extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#021631'
   },
 
   activityIndicator: {

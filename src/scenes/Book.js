@@ -16,6 +16,7 @@ import {
   Text
 } from 'native-base'
 
+import MyStatusBar from '../components/MyStatusBar'
 import BookDetails from '../components/BookDetails'
 import ChapterList from '../components/ChapterList'
 
@@ -91,7 +92,7 @@ export default class Book extends Component {
         <ActivityIndicator />
       </View>
     ) : (
-      <Container>
+      <Container style={styles.content}>
         <BookDetails
           user={this.state.book.user}
           details={this.state.book.details}/>
@@ -107,11 +108,14 @@ export default class Book extends Component {
     return (
       <Container>
         <Header style={styles.header}>
+          <MyStatusBar
+            backgroundColor="#021631"
+            barStyle="light-content" />
           <Left>
             <Button
               transparent
               onPress={() => this.props.navigation.dispatch(NavigationActions.back())}>
-              <Icon style={{color: 'black'}} name='arrow-back' />
+              <Icon style={styles.white} name='arrow-back' />
             </Button>
           </Left>
           <Right>
@@ -137,13 +141,22 @@ export default class Book extends Component {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: 'white',
-    borderBottomColor: 'transparent'
+    backgroundColor: '#021631',
+    borderBottomWidth: 0
   },
 
   activityIndicator: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+
+  white: {
+    color: 'white'
+  },
+
+  content: {
+    flex: 1,
+    backgroundColor: '#021631'
   }
 })

@@ -53,6 +53,7 @@ export default class UserManager {
           if (book.user && book.user.favorited) { books.push(mod) }
         }
       }))
+      if (!books.length) { return null }
       return books
     } catch (error) {
       console.log(error)
@@ -111,7 +112,7 @@ export default class UserManager {
   static async getWords() {
     try {
       const response = await AsyncStorage.getItem('vocabulary')
-      if (response === null) { return [] }
+      if (response === null) { return null }
       const words = JSON.parse(response).reverse()
       let ret = []
       for (let word of words) {

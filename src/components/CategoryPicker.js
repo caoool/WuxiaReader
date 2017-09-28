@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import { StyleSheet } from 'react-native'
 import {
     Picker,
     Item as FormItem
@@ -22,11 +22,15 @@ export default class CategoryPicker extends Component {
 
   render() {
     renderCategories = this.props.categories.map(category => {
-      return <Item label={category} value={category} key={category}/>
+      return <Item
+        label={category}
+        value={category}
+        key={category}/>
     })
 
     return (
       <Picker
+        textStyle={styles.white}
         iosHeader='Category'
         mode='dropdown'
         selectedValue={this.state.selected}
@@ -37,3 +41,9 @@ export default class CategoryPicker extends Component {
     )
   }
 }
+
+const styles = StyleSheet.create({
+  white:  {
+    color: 'white'
+  }
+})

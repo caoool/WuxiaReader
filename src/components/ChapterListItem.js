@@ -69,14 +69,16 @@ const styles = StyleSheet.create ({
   },
 
   row: {
-    padding: 12,
-    paddingTop: 20,
-    paddingBottom: 20,
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    borderBottomWidth: 0.5,
-    borderColor: 'lightgrey'
+    margin: 10,
+    borderRadius: 12,
+    borderWidth: 0.5,
+    borderColor: '#d6d7da',
+    backgroundColor: '#e5e5e5',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
+    elevation: 1,
   },
 
   icons: {

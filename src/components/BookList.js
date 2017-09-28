@@ -62,6 +62,18 @@ export default class BookList extends Component {
 }
 
 const styles = StyleSheet.create ({
+  row: {
+    margin: 10,
+    borderRadius: 12,
+    borderColor: '#d6d7da',
+    backgroundColor: '#e5e5e5',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
+    elevation: 1,
+  },
+
   title: {
     marginLeft: 20,
     fontWeight: 'bold'

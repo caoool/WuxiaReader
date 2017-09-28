@@ -7,6 +7,7 @@ import {
 import { NavigationActions } from 'react-navigation'
 
 import {
+  Container,
   Header,
   Body,
   Button,
@@ -20,6 +21,7 @@ import {
   Text
 } from 'native-base'
 
+import MyStatusBar from '../components/MyStatusBar'
 import CategoryBar from '../components/CategoryBar'
 import CategoryPicker from '../components/CategoryPicker'
 import BookList from '../components/BookList'
@@ -52,7 +54,6 @@ export default class Catalog extends Component {
   }
 
   refresh = () => {
-    console.log('refreshing')
     this.setState({ refreshing: true })
     this.loadCatalog(true)
   }
@@ -91,14 +92,18 @@ export default class Catalog extends Component {
     )
 
     return (
-      <View style={styles.container}>
-        <Header searchBar rounded>
+      <Container>
+        <Header rounded searchBar
+          style={styles.header}>
+          <MyStatusBar
+            backgroundColor="#021631"
+            barStyle="light-content" />
           <Left style={styles.left}>
             <Button transparent
               style={styles.backButton}
               onPress={() => this.goBack()}>
               <Icon
-                style={styles.backButtonIcon}
+                style={styles.white}
                 name='arrow-back' />
             </Button>
           </Left>
@@ -114,8 +119,10 @@ export default class Catalog extends Component {
               categories={Object.keys(this.state.catalog)}/>
           </Right>
         </Header>
-        {content}
-      </View>
+        <View style={styles.container}>
+          {content}
+        </View>
+      </Container>
     )
   }
 }
@@ -123,6 +130,15 @@ export default class Catalog extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1
+  },
+
+  header: {
+    backgroundColor: '#021631',
+    borderBottomWidth: 0
+  },
+
+  white:  {
+    color: 'white'
   },
 
   activityIndicator: {
@@ -148,10 +164,11 @@ const styles = StyleSheet.create({
   },
 
   backButtonIcon: {
-    color: 'black'
+    color: 'white'
   },
 
   bookList: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#021631'
   }
 })

@@ -16,6 +16,8 @@ import {
   Title
 } from 'native-base'
 
+import MyStatusBar from '../components/MyStatusBar'
+import BlankPlaceholder from '../components/BlankPlaceholder'
 import BookList from '../components/BookList'
 
 import UserManager from '../utils/UserManager'
@@ -40,17 +42,11 @@ export default class Favorite extends Component {
   }
 
   refresh = () => {
-    console.log('refreshing')
     this.setState({ refreshing: true })
     this.loadFavorites()
   }
 
   componentDidMount() {
-    this.loadFavorites()
-  }
-
-  componentWillFocus() {
-    console.log('hahaha')
     this.loadFavorites()
   }
 
@@ -61,6 +57,9 @@ export default class Favorite extends Component {
       </View>
     ) : (
       <View style={styles.bookList}>
+        {!this.state.books &&
+          <BlankPlaceholder />
+        }
         <BookList
           books={this.state.books}
           navigate={this.props.navigation.navigate}
@@ -71,14 +70,17 @@ export default class Favorite extends Component {
 
     return (
       <Container>
-        <Header>
+        <MyStatusBar
+          backgroundColor="#021631"
+          barStyle="light-content" />
+        <Header style={styles.header}>
           <Body>
-            <Title>My Favorites</Title>
+            <Title style={styles.text}>My Favorites</Title>
           </Body>
-          <Right>
+          <Right style={{borderWidth: 0}}>
             <Button transparent
               onPress={() => this.props.navigation.navigate('Catalog')}>
-              <Icon name='md-add' />
+              <Icon style={styles.text} name='md-add' />
             </Button>
           </Right>
         </Header>
@@ -95,6 +97,15 @@ const styles = StyleSheet.create({
     flex: 1
   },
 
+  header: {
+    backgroundColor: '#021631',
+    borderBottomWidth: 0
+  },
+
+  text:  {
+    color: 'white'
+  },
+
   activityIndicator: {
     flex: 1,
     justifyContent: 'center',
@@ -102,6 +113,7 @@ const styles = StyleSheet.create({
   },
 
   bookList: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#021631'
   }
 })

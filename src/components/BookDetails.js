@@ -82,7 +82,17 @@ const styles = StyleSheet.create({
   details: {
     flex: 0,
     paddingBottom: 15,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    margin: 10,
+    borderRadius: 12,
+    borderWidth: 0.5,
+    borderColor: '#d6d7da',
+    backgroundColor: '#e5e5e5',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
+    elevation: 1,
   },
 
   inline: {

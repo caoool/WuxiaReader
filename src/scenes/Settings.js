@@ -11,8 +11,9 @@ import {
   Icon
 } from 'native-base'
 
-import Rate from 'react-native-rate'
+import MyStatusBar from '../components/MyStatusBar'
 
+import Rate from 'react-native-rate'
 import Loader from '../utils/Loader'
 
 export default class Settings extends Component {
@@ -26,7 +27,10 @@ export default class Settings extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Button bordered block
+        <MyStatusBar
+          backgroundColor="#021631"
+          barStyle="light-content" />
+        <Button bordered block light
           style={styles.button}
           onPress={() => {
             let options = {
@@ -53,7 +57,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: '#021631'
   },
 
   button: {

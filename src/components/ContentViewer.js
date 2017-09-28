@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback
 } from 'react-native'
 
+import MyStatusBar from '../components/MyStatusBar'
 import StatusBarPadding from './StatusBarPadding'
 
 let pre = `
@@ -69,51 +70,26 @@ export default class ContentViewer extends Component {
 
   render() {
     return (
-      <WebView
-        source={{html: pre + this.props.chapter.content + post}}
-        onMessage={(event) => this._hook(event.nativeEvent.data)} />
+      <View style={styles.container}>
+        <MyStatusBar
+          backgroundColor='white'
+          barStyle="dark-content" />
+        <WebView
+          style={styles.content}
+          source={{html: pre + this.props.chapter.content + post}}
+          onMessage={(event) => this._hook(event.nativeEvent.data)} />
+      </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  view: {
+  container: {
+    flex: 1,
     backgroundColor: 'white'
   },
 
-  row: {
-    backgroundColor: 'white',
-    flex: 1,
-    justifyContent: 'flex-start',
-    padding: 15,
-    paddingLeft: 20,
-    paddingRight: 20
-  },
-
-  rowNight: {
-    backgroundColor: 'black',
-    flex: 1,
-    justifyContent: 'flex-start',
-    padding: 15,
-    paddingLeft: 20,
-    paddingRight: 20
-  },
-
-  word: {
-    color: 'black',
-    fontSize: 18,
-    textAlign: 'justify',
-    lineHeight: 30,
-    flexDirection: 'row',
-    flexWrap: 'wrap'
-  },
-
-  wordNight: {
-    color: 'white',
-    fontSize: 18,
-    textAlign: 'justify',
-    lineHeight: 30,
-    flexDirection: 'row',
-    flexWrap: 'wrap'
+  content: {
+    backgroundColor: 'white'
   }
 })

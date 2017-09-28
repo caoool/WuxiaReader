@@ -82,13 +82,13 @@ const Tabs = TabNavigator({
   tabBarPosition: 'bottom',
   initialRouteName: 'Favorites',
   tabBarOptions: {
-    activeTintColor: 'black',
+    activeTintColor: 'white',
     activeBackgroundColor: 'transparent',
-    inactiveTintColor: 'lightgrey',
+    inactiveTintColor: 'grey',
     inactiveBackgroundColor: 'transparent',
     showLabel: true,
     showIcon: true,
-    style: { borderWidth: 0 },
+    style: { backgroundColor: '#021631' },
     labelStyle: { borderWidth: 0 },
     tabStyle: { borderWidth: 0 }
   },

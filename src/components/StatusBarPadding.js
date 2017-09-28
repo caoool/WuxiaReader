@@ -18,6 +18,6 @@ export default class StatusBarPadding extends Component {
 const styles = StyleSheet.create({
   statusBarPadding: {
     height: (Platform.OS === 'ios') ? 20 : 0,
-    backgroundColor: "white"
+    backgroundColor: 'transparent'
   }
 })
