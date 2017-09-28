@@ -9,7 +9,10 @@ import {
 import {
   Container,
   Header,
+  Button,
+  Icon,
   Body,
+  Right,
   Title
 } from 'native-base'
 
@@ -72,6 +75,12 @@ export default class Favorite extends Component {
           <Body>
             <Title>My Favorites</Title>
           </Body>
+          <Right>
+            <Button transparent
+              onPress={() => this.props.navigation.navigate('Catalog')}>
+              <Icon name='md-add' />
+            </Button>
+          </Right>
         </Header>
         <View style={styles.container}>
           {content}

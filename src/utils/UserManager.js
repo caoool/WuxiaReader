@@ -111,8 +111,16 @@ export default class UserManager {
   static async getWords() {
     try {
       const response = await AsyncStorage.getItem('vocabulary')
-      if (response === null) { return null }
-      return JSON.parse(response)
+      if (response === null) { return [] }
+      const words = JSON.parse(response).reverse()
+      let ret = []
+      for (let word of words) {
+        ret.push({
+          word: word,
+          key: word
+        })
+      }
+      return ret
     } catch (error) {
       console.log(error)
     }

@@ -6,7 +6,10 @@ import {
 
 import {
   Text,
-  Icon
+  Icon,
+  ListItem,
+  Body,
+  Right
 } from 'native-base'
 
 import UserManager from '../utils/UserManager'
@@ -37,26 +40,23 @@ export default class ChapterListItem extends Component {
 
   render() {
     return (
-      <View style={styles.row}>
-        <Text
-          style={styles.text}
-          onPress={() => this.onPress(this.props.title, this.props.url)}
-          numberOfLines={1}
-          ellipsizeMode={'tail'}>
-          {this.props.title}
-        </Text>
-        <View style={styles.icons}>
-          {this.state.read &&
-            <Icon
-            style={styles.icon}
-            name='md-eye' />
-          }
-          <Text>   </Text>
+      <ListItem
+        style={styles.row}
+        onPress={() => this.onPress(this.props.title, this.props.url)}>
+        <Body>
+          <Text
+            style={styles.text}
+            numberOfLines={1}
+            ellipsizeMode={'tail'}>
+            {this.props.title}
+          </Text>
+        </Body>
+        <Right>
           <Icon
             style={styles.icon}
             name='arrow-forward' />
-        </View>
-      </View>
+        </Right>
+      </ListItem>
     )
   }
 }

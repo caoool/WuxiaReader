@@ -37,6 +37,7 @@ export default class Loader {
               'title': $(e2).children('a').text(),
               'url': $(e2).children('a').attr('href')
             }
+            /*
             // fetch book details
             const response2 = await fetch(book.url)
             const html2 = await response2.text()
@@ -50,6 +51,7 @@ export default class Loader {
             // fetch last updated chapter
             const lastChapter = $2('article a:contains(Chapter)').last().text()
             book['lastChapter'] = lastChapter
+            */
             // push to catalog
             catalog[category].push(book)
             catalog['All'].push(book)

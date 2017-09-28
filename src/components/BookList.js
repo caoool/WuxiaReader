@@ -42,13 +42,13 @@ export default class BookList extends Component {
           <ListItem
             style={styles.row}
             onPress={() => this._onPress(item.title, item.url)}>
-            <Thumbnail
+            {/* <Thumbnail
               square
               size={80}
-              source={item.cover.url ? item.cover : require('../../public/no-cover-placeholder.png')}/>
+              source={item.cover.url ? item.cover : require('../../public/no-cover-placeholder.png')}/> */}
             <Body>
               <Text style={styles.title}>{item.title}</Text>
-              <Text note style={styles.sub}>{item.lastChapter}</Text>
+              {/* <Text note style={styles.sub}>{item.lastChapter}</Text> */}
               {lastRead(item)}
             </Body>
             <Right>

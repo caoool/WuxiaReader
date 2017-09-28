@@ -4,7 +4,7 @@
 */
 
 const CONSTANTS = {
-	SERVER_URL: 'ws://localhost:3000/websocket',
+	SERVER_URL: 'ws://smae.loopcowstudio.com/websocket',
 
   YD_TRANSLATOR_APP_ID: '706f78c0632438d3',
 	YD_TRANSLATOR_APP_KEY: 'OLWePPpFpAks1rtbIfdY6pqh4YuYFQ6B',

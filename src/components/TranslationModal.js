@@ -49,11 +49,13 @@ class TranslationModal extends Component {
   }
 
   addCount = (word) => {
+    console.log('addCount')
     Meteor.call('vocabulary.addCount', { word })
   }
 
   addFav = (word) => {
     if (this.state.isFaved) { return }
+    console.log('addFav')
     UserManager.saveWord(word)
     Meteor.call('vocabulary.addFav', { word })
     this.setState({ isFaved: true })
@@ -157,10 +159,11 @@ class TranslationModal extends Component {
 }
 
 export default createContainer(props => {
-  Meteor.subscribe('vocabulary.word', props.wordToTranslate.trim())
-  const item = Meteor.collection('vocabulary').findOne()
-  count = item ? item.count : 0
-  fav = item ? item.fav : 0
+  const word = props.wordToTranslate.trim()
+  Meteor.subscribe('vocabulary.word', word)
+  const item = Meteor.collection('vocabulary').findOne({ word: word })
+  count = item ? item.count : '-'
+  fav = item ? item.fav : '-'
   return {
     count: count,
     fav: fav

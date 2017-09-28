@@ -4,6 +4,7 @@ import {
   StyleSheet,
   View
 } from 'react-native'
+import { NavigationActions } from 'react-navigation'
 
 import {
   Header,
@@ -44,6 +45,10 @@ export default class Catalog extends Component {
       selectedCategory: Object.keys(catalog)[0],
       books: catalog[Object.keys(catalog)[0]]
     })
+  }
+
+  goBack = () => {
+    this.props.navigation.dispatch(NavigationActions.back())
   }
 
   refresh = () => {
@@ -88,15 +93,26 @@ export default class Catalog extends Component {
     return (
       <View style={styles.container}>
         <Header searchBar rounded>
-          <Item>
+          <Left style={styles.left}>
+            <Button transparent
+              style={styles.backButton}
+              onPress={() => this.goBack()}>
+              <Icon
+                style={styles.backButtonIcon}
+                name='arrow-back' />
+            </Button>
+          </Left>
+          <Item style={styles.middle}>
             <Icon name="ios-search" />
             <Input
               placeholder="Search"
               onChangeText={this.queryChanged.bind(this)}/>
           </Item>
-          <CategoryPicker
-            selectCategory={this.selectCategory}
-            categories={Object.keys(this.state.catalog)}/>
+          <Right style={styles.right}>
+            <CategoryPicker
+              selectCategory={this.selectCategory}
+              categories={Object.keys(this.state.catalog)}/>
+          </Right>
         </Header>
         {content}
       </View>
@@ -113,6 +129,26 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+
+  left: {
+    flex: 1
+  },
+
+  middle: {
+    flex: 5
+  },
+
+  right: {
+    flex: 1
+  },
+
+  backButton: {
+    marginRight: 10
+  },
+
+  backButtonIcon: {
+    color: 'black'
   },
 
   bookList: {

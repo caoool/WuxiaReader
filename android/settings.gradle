@@ -1,4 +1,6 @@
 rootProject.name = 'WuxiaReader'
+include ':react-native-rate'
+project(':react-native-rate').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-rate/android')
 include ':react-native-vector-icons'
 project(':react-native-vector-icons').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-vector-icons/android')
 

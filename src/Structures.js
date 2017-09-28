@@ -1,5 +1,14 @@
 import React, { Component } from 'react'
-import { StackNavigator, TabNavigator } from 'react-navigation'
+import {
+  StyleSheet,
+  View,
+  Image
+} from 'react-native'
+import {
+  StackNavigator,
+  TabNavigator,
+} from 'react-navigation'
+
 import {
   Button,
   Text,
@@ -31,19 +40,9 @@ const FavoritesView = StackNavigator({
   Reader: {
     screen: Reader,
     navigationOptions: { tabBarVisible: false }
-  }
-}, {
-  headerMode: 'none'
-})
-
-const CatalogView = StackNavigator({
-  Catalog: { screen: Catalog },
-  Book: {
-    screen: Book,
-    navigationOptions: { tabBarVisible: false }
   },
-  Reader: { 
-    screen: Reader,
+  Catalog: {
+    screen: Catalog,
     navigationOptions: { tabBarVisible: false }
   }
 }, {
@@ -51,48 +50,48 @@ const CatalogView = StackNavigator({
 })
 
 const Tabs = TabNavigator({
-  Favorites: { screen: FavoritesView },
-  CatalogView: { screen: CatalogView },
-  Glossary: { screen: Glossary },
-  Settings: { screen: Settings }
+  Glossary: {
+    screen: Glossary,
+    navigationOptions: {
+      tabBarLabel:"Glossary",
+      tabBarIcon: ({ tintColor }) => <Image
+        source={require('../public/words.png')}
+        style={[styles.iconMiddle, {tintColor: tintColor}]}/>
+    }
+  },
+  Favorites: {
+    screen: FavoritesView,
+    navigationOptions: {
+      tabBarLabel:"Favorites",
+      tabBarIcon: ({ tintColor }) => <Image
+        source={require('../public/shelf.png')}
+        style={[styles.iconMiddle, {tintColor: tintColor}]}/>
+    }
+  },
+
+  Settings: {
+    screen: Settings,
+    navigationOptions: {
+      tabBarLabel:"Settings",
+      tabBarIcon: ({ tintColor }) => <Image
+        source={require('../public/settings.png')}
+        style={[styles.iconMiddle, {tintColor: tintColor}]}/>
+    }
+  }
 }, {
   tabBarPosition: 'bottom',
-  tabBarComponent: props => {
-    return (
-      <Footer>
-        <FooterTab>
-          <Button
-            vertical
-            active={props.navigationState.index === 0}
-            onPress={() => props.navigation.navigate('Favorites')}>
-            <Icon name='heart' />
-            <Text>Favorites</Text>
-          </Button>
-          <Button
-            vertical
-            active={props.navigationState.index === 1}
-            onPress={() => props.navigation.navigate('CatalogView')}>
-            <Icon name="md-globe" />
-            <Text>Catalog</Text>
-          </Button>
-          <Button
-            vertical
-            active={props.navigationState.index === 2}
-            onPress={() => props.navigation.navigate('Glossary')}>
-            <Icon name="md-list" />
-            <Text>Glossary</Text>
-          </Button>
-          <Button
-            vertical
-            active={props.navigationState.index === 3}
-            onPress={() => props.navigation.navigate('Settings')}>
-            <Icon name="md-settings" />
-            <Text>Settings</Text>
-          </Button>
-        </FooterTab>
-      </Footer>
-    ) 
-  }
+  initialRouteName: 'Favorites',
+  tabBarOptions: {
+    activeTintColor: 'black',
+    activeBackgroundColor: 'transparent',
+    inactiveTintColor: 'lightgrey',
+    inactiveBackgroundColor: 'transparent',
+    showLabel: true,
+    showIcon: true,
+    style: { borderWidth: 0 },
+    labelStyle: { borderWidth: 0 },
+    tabStyle: { borderWidth: 0 }
+  },
 })
 
 export default class Entry extends Component {
@@ -105,5 +104,10 @@ export default class Entry extends Component {
   }
 }
 
-
-
+const styles = StyleSheet.create({
+  iconMiddle: {
+    width: 25,
+    height: 25,
+    marginBottom: 0,
+  },
+});
