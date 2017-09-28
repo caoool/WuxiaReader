@@ -58,7 +58,7 @@ const Tabs = TabNavigator({
     navigationOptions: {
       tabBarLabel:"Glossary",
       tabBarIcon: ({ tintColor }) => <Image
-        source={require('../public/words.png')}
+        source={require('assets/img/words.png')}
         style={[styles.iconMiddle, {tintColor: tintColor}]}/>
     }
   },
@@ -67,7 +67,7 @@ const Tabs = TabNavigator({
     navigationOptions: {
       tabBarLabel:"Favorites",
       tabBarIcon: ({ tintColor }) => <Image
-        source={require('../public/shelf.png')}
+        source={require('assets/img/shelf.png')}
         style={[styles.iconMiddle, {tintColor: tintColor}]}/>
     }
   },
@@ -77,7 +77,7 @@ const Tabs = TabNavigator({
     navigationOptions: {
       tabBarLabel:"Settings",
       tabBarIcon: ({ tintColor }) => <Image
-        source={require('../public/settings.png')}
+        source={require('assets/img/settings.png')}
         style={[styles.iconMiddle, {tintColor: tintColor}]}/>
     }
   }
